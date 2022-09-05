@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<style>
+			img#targetImage {
+				position: fixed;
+				left: calc(50% - 256px);
+				top: calc(50% - 256px);
+			}
+		</style>
+		<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+	</head>
+	<body>
+			<label for="request_string">Text: </label>
+			<input id="request_string" type="text" name="request_string" placeholder="Enter some text:">
+			<input type="submit" value="OK" onClick="CallAPI()" id="submitButton">
+			<input type="submit" value="Restart Server" onClick="RestartServer()" style="float: right">
+			<img src="" id="targetImage">
+	</body>
+	<script>
+		function CallAPI(){
+			$('#submitButton').attr('disabled', 'disabled')
+			$.ajax({
+				type: "POST",
+				url: '/handle',
+				data: { request_string: $('#request_string').val() },
+				success: (data) => {
+					$('#submitButton').removeAttr('disabled')
+					$('#targetImage').attr('src', data[0])
+				}
+			});
+		}
+		function RestartServer(){
+			$.ajax({ type: "POST", url: '/restart' });
+		}
+	</script>
+</html>
